@@ -12,6 +12,12 @@ if(jQuery) {
   console.log("nope");
 }
 
+if(Notify) {
+  console.log("Notify loaded");
+} else {
+  console.log("nope");
+}
+
 // giving into the jquery life.
 
 function post(path, params) { // TODO: this only executes once...
@@ -33,8 +39,30 @@ function post(path, params) { // TODO: this only executes once...
   });
 }
 
+var notification = new Notify("We've received your request!", {body: "Recommendations in your inbox soon."})
+
+function send_notification() {
+  if (!Notify.needsPermission) {
+      notification.show();
+  } else if (Notify.isSupported()) {
+      Notify.requestPermission(onPermissionGranted, onPermissionDenied);
+  }
+
+  function onPermissionGranted() {
+    console.log('Permission has been granted by the user');
+    notification.show();
+  }
+
+  function onPermissionDenied() {
+    console.warn('Permission has been denied by the user');
+  }
+}
+
 // On click listener
 function send_request(info, tab) {
+
+  send_notification();
+
   console.log("srcUrl: " + info.srcUrl);
   console.log("linkUrl: " + info.linkUrl);
   console.log("pageUrl: " + info.pageUrl);

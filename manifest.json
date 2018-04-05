@@ -1,10 +1,10 @@
   {
     "name": "Shoppr.ai",
-    "version": "0.4",
+    "version": "0.5",
     "description": "Next gen fashion",
-    "permissions": ["contextMenus", "identity", "identity.email"],
+    "permissions": ["contextMenus", "identity", "identity.email", "notifications"],
     "background": {
-    	"scripts": ["jquery.js", "sample.js"]
+    	"scripts": ["jquery.js", "notify.js", "sample.js"]
 	},
     "browser_action": {
         "default_icon":"icon.png",

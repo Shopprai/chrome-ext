@@ -39,9 +39,8 @@ function post(path, params) { // TODO: this only executes once...
   });
 }
 
-var notification = new Notify("We've received your request!", {body: "Recommendations in your inbox soon."})
-
-function send_notification() {
+function send_notification(title, body) {
+  var notification = new Notify(title, {body: body})
   if (!Notify.needsPermission) {
       notification.show();
   } else if (Notify.isSupported()) {
@@ -61,19 +60,14 @@ function send_notification() {
 // On click listener
 function send_request(info, tab) {
 
-  send_notification();
-
-  console.log("srcUrl: " + info.srcUrl);
-  console.log("linkUrl: " + info.linkUrl);
-  console.log("pageUrl: " + info.pageUrl);
+  send_notification(title="We've received your request!", body="Recommendations in your inbox soon.");
 
   chrome.identity.getProfileUserInfo(function(user_info){ // TODO: code block not executing :(
-    console.log("posting");
-    var post_url = "https://shoppr-ai.herokuapp.com/request";
+    // var post_url = "https://shoppr-ai.herokuapp.com/request";
+    var post_url = "https://shoppr-ai.herokuapp.com/request"
     params = {'src_url': info.srcUrl, 'link_url': info.linkUrl, 'page_url':info.pageUrl, 'email': user_info.email};
     post(post_url, params);
   });
-  console.log("done");
 }
 
 $(document).ready(function(){

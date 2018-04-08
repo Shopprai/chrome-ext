@@ -1,6 +1,6 @@
   {
     "name": "Shoppr.ai",
-    "version": "0.6",
+    "version": "0.7",
     "description": "Next gen fashion",
     "permissions": ["contextMenus", "identity", "identity.email", "notifications"],
     "background": {

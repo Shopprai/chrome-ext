@@ -3,19 +3,19 @@
 
 // Get auth token (but where are we using it? idk)
 chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
-  console.log("authenticated af");
+  console.log("Logged in with Chrome.");
 });
 
 if(jQuery) {
-  console.log("JQuery loaded");
+  console.log("JQuery loaded.");
 } else{
-  console.warn("JQuery not loaded");
+  console.warn("JQuery not loaded.");
 }
 
 if(Notify) {
-  console.log("Notify loaded");
+  console.log("Notify loaded.");
 } else {
-  console.warn("Notify not loaded");
+  console.warn("Notify not loaded.");
 }
 
 // giving into the jquery life.
@@ -60,17 +60,16 @@ function send_notification(title, body) {
 // On click listener
 function send_request(info, tab) {
 
-  send_notification(title="We've received your request!", body="Recommendations in your inbox soon.");
+  send_notification(title="We've received your request!", body="Recommendations in your inbox in 24 hours (:");
 
   chrome.identity.getProfileUserInfo(function(user_info){
-    // var post_url = "https://shoppr-ai.herokuapp.com/request"
-    var post_url = "http://localhost:5000/request"
+    var post_url = "https://shoppr-ai.herokuapp.com/request"
+    // var post_url = "http://localhost:5000/request"
     params = {'src_url': info.srcUrl, 'link_url': info.linkUrl, 'page_url':info.pageUrl, 'email': user_info.email};
     post(post_url, params);
   });
 }
 
 $(document).ready(function(){
-  console.log('document ready');
   var parent = chrome.contextMenus.create({"title": "Find similar clothing", "contexts":["image"], "onclick": send_request});
 });

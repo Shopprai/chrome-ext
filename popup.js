@@ -1,5 +1,3 @@
-console.log("popup.js");
-
 var stored_email = "";
 
 function create_list_item(request) {
@@ -14,8 +12,10 @@ function create_list_item(request) {
 	img_div.className = "img";
 	anchor.appendChild(img_div);
 
+
 	// Create checkboxes
 	var options = ["fit", "color", "brand"];
+	var selected_options = request.priority_list;
 	var options_form = document.createElement("form");
 	options_form.className = "form-items";
 	for (option of options) {
@@ -24,6 +24,11 @@ function create_list_item(request) {
 		input_item.value = option;
 		input_item.type = "checkbox";
 		input_item.name = request.src_url + "_chkbox"; // Identify form item by its item url.
+		if (selected_options.indexOf(option) >= 0) {
+			input_item.checked = "checked"
+		} else {
+			input_item.checked = ""
+		}
 
 		var line_break = document.createElement("br");
 		options_form.appendChild(input_item);
@@ -44,9 +49,25 @@ function create_list_item(request) {
 	return list_item;
 }
 
+function post(path, params) {
+  $.ajax({
+    type: "POST",
+    url: path, 
+    data: params,
+    dataType: "json",
+    success: function(result) {
+      console.log("success: " + result);
+    },
+    error: function(error) {
+      console.log("error: " + error);
+    },
+    complete: function(data) {
+      console.log("call completed");
+    }
+  });
+}
+
 function update_style_priorities(e) {
-	console.log(e.target.id);
-	console.log(stored_email);
 	var form_items = document.getElementsByName(e.target.id + "_chkbox");
 	checked_items = [];
 	for (item of form_items) { 
@@ -54,7 +75,10 @@ function update_style_priorities(e) {
 			checked_items.push(item.value);
 		}
 	}
-	console.log(checked_items);
+	// url: "http://localhost:5000/request/priorities"
+	var url = "https://shoppr-ai.herokuapp.com/priorities"
+	var params = {'_id': stored_email + e.target.id, 'priority_list': checked_items}
+	post(url, params);
 }
 
 function refresh_data() {
@@ -62,8 +86,8 @@ function refresh_data() {
 		stored_email = user_info.email;
 		$.ajax({
 			method: "GET",
-			url: "http://localhost:5000/request/" + user_info.email,
-			// url: "https://shoppr-ai.herokuapp.com/request/" + user_info.email,
+			// url: "http://localhost:5000/request/" + user_info.email,
+			url: "https://shoppr-ai.herokuapp.com/request/" + user_info.email,
 			success: function(results) {
 				requests = results.requests;
 				var ul = document.getElementById("request_list");
@@ -83,8 +107,6 @@ function refresh_data() {
 
 function activate_links() {
 	var links = document.getElementsByTagName("a");
-    console.log(links);
-    console.log(links.length);
     for (var i = 0; i < links.length; i++) {
             var ln = links[i];
             var location = ln.href;
@@ -94,5 +116,5 @@ function activate_links() {
     }
 }
 
-document.getElementById("refresh_button").onclick = refresh_data;
+// document.getElementById("refresh_button").onclick = refresh_data;
 window.onload = refresh_data;

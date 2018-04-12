@@ -4,6 +4,20 @@ body {
    overflow:auto;
 }
 
+h2 {
+	color: #25A395;
+}
+
+button {
+	background-color: #25A395;
+	color: #FFFFFF;
+}
+
+li {
+	border-top :1px solid #25A395;
+	margin-bottom: 2px;
+}
+
 ul {
 	list-style-type: none;
 	padding: 0;

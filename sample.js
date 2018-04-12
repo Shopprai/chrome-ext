@@ -20,7 +20,7 @@ if(Notify) {
 
 // giving into the jquery life.
 
-function post(path, params) {
+function post(path, params, success_callback) {
   console.log('post');
   $.ajax({
     type: "POST",
@@ -29,9 +29,11 @@ function post(path, params) {
     dataType: "json",
     success: function(result) {
       console.log("success: " + result);
+      success_callback();
     },
     error: function(error) {
       console.log("error: " + error);
+      return false;
     },
     complete: function(data) {
       console.log("call completed");
@@ -60,16 +62,16 @@ function send_notification(title, body) {
 // On click listener
 function send_request(info, tab) {
 
-  send_notification(title="We've received your request!", body="Recommendations in your inbox in 24 hours (:");
-
   chrome.identity.getProfileUserInfo(function(user_info){
     var post_url = "https://shoppr-ai.herokuapp.com/request"
     // var post_url = "http://localhost:5000/request"
     params = {'src_url': info.srcUrl, 'link_url': info.linkUrl, 'page_url':info.pageUrl, 'email': user_info.email};
-    post(post_url, params);
+    var success = post(post_url, params, function() {
+      send_notification(title="Loomi heard your request!", body="Recommendations in your inbox in 24 hours (:");
+    });
   });
 }
 
 $(document).ready(function(){
-  var parent = chrome.contextMenus.create({"title": "Find similar clothing", "contexts":["image"], "onclick": send_request});
+  var parent = chrome.contextMenus.create({"title": "Send out Loomi to find alternatives", "contexts":["image"], "onclick": send_request});
 });

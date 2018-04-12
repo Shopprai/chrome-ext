@@ -37,7 +37,7 @@ function create_list_item(request) {
 	}
 
 	var submit_button = document.createElement("button");
-	submit_button.appendChild(document.createTextNode("Submit"));
+	submit_button.appendChild(document.createTextNode("Update"));
 	submit_button.className = "form-submit";
 	submit_button.id = request.src_url;
 	submit_button.onclick = update_style_priorities;
@@ -75,7 +75,7 @@ function update_style_priorities(e) {
 			checked_items.push(item.value);
 		}
 	}
-	// url: "http://localhost:5000/request/priorities"
+	// var url = "http://localhost:5000/request/priorities"
 	var url = "https://shoppr-ai.herokuapp.com/priorities"
 	var params = {'_id': stored_email + e.target.id, 'priority_list': checked_items}
 	post(url, params);

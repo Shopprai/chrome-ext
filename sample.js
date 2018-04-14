@@ -20,7 +20,7 @@ if(Notify) {
 
 // giving into the jquery life.
 
-function post(path, params, success_callback) {
+function post(path, params, success_callback, failure_callback) {
   console.log('post');
   $.ajax({
     type: "POST",
@@ -33,6 +33,7 @@ function post(path, params, success_callback) {
     },
     error: function(error) {
       console.log("error: " + error);
+      failure_callback();
       return false;
     },
     complete: function(data) {
@@ -66,12 +67,15 @@ function send_request(info, tab) {
     var post_url = "https://shoppr-ai.herokuapp.com/request"
     // var post_url = "http://localhost:5000/request"
     params = {'src_url': info.srcUrl, 'link_url': info.linkUrl, 'page_url':info.pageUrl, 'email': user_info.email};
-    var success = post(post_url, params, function() {
+    var success = post(post_url, params, success_callback=function() {
       send_notification(title="Loomi heard your request!", body="Recommendations in your inbox in 24 hours (:");
+    }, failure_callback=function() {
+      send_notification(title="An error occurred with the image you sent.", body="If this issue persists, email contact@loomable.co with your request.")
     });
   });
 }
 
 $(document).ready(function(){
-  var parent = chrome.contextMenus.create({"title": "Send out Loomi to find alternatives", "contexts":["image"], "onclick": send_request});
+  var image_menu_item = chrome.contextMenus.create({"title": "Send out Loomi to find alternatives", "contexts":["image"], "onclick": send_request});
+  var instagram_menu_item = chrome.contextMenus.create({"title":"Mention @loomable.co to get personalized recommendations in your inbox!", "documentUrlPatterns":["*://www.instagram.com/*"]})
 });

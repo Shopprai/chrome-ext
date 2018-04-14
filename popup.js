@@ -38,14 +38,21 @@ function create_list_item(request) {
 
 	var submit_button = document.createElement("button");
 	submit_button.appendChild(document.createTextNode("Update"));
+	submit_button.addEventListener("click", function() {
+		submit_button.innerHTML = "Updated!";
+	});
 	submit_button.className = "form-submit";
 	submit_button.id = request.src_url;
 	submit_button.onclick = update_style_priorities;
+
+	var timer = document.createElement("p");
+	timer.innerHTML = request.time_left_hours + ":" + request.time_left_minutes + " until this request is fulfilled!"
 
 	// Compile together
 	list_item.appendChild(anchor);
 	list_item.appendChild(options_form);
 	list_item.appendChild(submit_button);
+	list_item.appendChild(timer);
 	return list_item;
 }
 

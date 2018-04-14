@@ -1,7 +1,7 @@
   {
     "name": "Loomable",
-    "version": "0.8",
-    "description": "Next gen fashion",
+    "version": "0.10",
+    "description": "Your online personal shopper",
     "permissions": ["contextMenus", "identity", "identity.email", "notifications"],
     "background": {
     	"scripts": ["jquery.js", "notify.js", "sample.js"]
